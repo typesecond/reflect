@@ -3,7 +3,7 @@
 
   const projects = [
     { name: 'Bridge75 battery', type: 'FIRMWARE / EMBEDDED SYSTEMS', x: .23, y: .29, art: 'keyboard', description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate; hardware validation is pending.', tags: ['QMK / C', 'Battery telemetry', 'Fn lighting'], repo: 'https://github.com/typesecond/bridge75-firmware' },
-    { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .77, y: .31, art: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗' },
+    { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .77, y: .31, art: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗', demo: 'media/sifter-demo.mp4', demoPoster: 'media/sifter-demo-poster.png' },
     { name: 'Ground station', type: 'SYSTEMS / TELEMETRY', x: .23, y: .63, art: 'dish', description: 'A sample operations interface concept. Bring satellite telemetry, communication windows, and ground-station status into a single view.', tags: ['Telemetry', 'Mission control'] },
     { name: 'Terrain explorer', type: 'GRAPHICS / MAPPING', x: .77, y: .65, art: 'terrain', description: 'A sample mapping concept. Turn elevation data into an explorable landscape with contours, surface shading, and changing light.', tags: ['Computer graphics', 'Terrain rendering'] },
   ];
@@ -36,6 +36,7 @@
   const beams = [...document.querySelectorAll('.rf-exposures i')];
   const projectLayer = document.querySelector('#reflect-projects');
   const dialog = document.querySelector('#rf-detail');
+  const projectDemo = new ProjectDemo(dialog, dialog.querySelector('#rf-detail-title'));
   const countLabel = document.querySelector('#rf-count');
   const continueButton = document.querySelector('#rf-continue');
   const knobTurn = document.querySelector('#sayo-knob-turn');
@@ -119,6 +120,7 @@
     repoLink.textContent = project.linkLabel || 'View firmware on GitHub ↗';
     if (project.repo) repoLink.href = project.repo;
     else repoLink.removeAttribute('href');
+    projectDemo.show(project);
     if (!dialog.open) dialog.showModal();
   }
   dialog.querySelector('.rf-modal-close').addEventListener('click', () => dialog.close());

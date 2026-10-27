@@ -192,3 +192,58 @@ body.exploring #intro, #reflect-field.is-lit #rf-intro { filter: none; }
   #rf-time { font-size: 9px; }
   #rf-skip { right: 12px; top: 12px; }
 }
+
+/* Size the preview as one 4:3 unit inside either project dialog. */
+#detail.has-project-demo,
+#rf-detail.has-project-demo {
+  box-sizing: border-box;
+  width: min(900px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  min-width: 0;
+  max-height: calc(100svh - 24px);
+  margin: auto;
+  padding: 44px clamp(12px, 3vw, 28px) 22px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#detail.has-project-demo[open],
+#rf-detail.has-project-demo[open] { display: block; }
+.has-project-demo .field-note { width: 100%; max-width: 100%; min-width: 0; padding-top: 0; }
+#detail.has-project-demo .specimen,
+.has-project-demo .note-label,
+.has-project-demo .note-rule { display: none; }
+.has-project-demo .detail-kicker,
+.has-project-demo .rf-modal-kicker { margin: 0 0 8px; overflow-wrap: anywhere; }
+#detail.has-project-demo h1,
+#rf-detail.has-project-demo h2 { margin: 0 0 12px; overflow-wrap: anywhere; }
+#detail.has-project-demo #detail-description { max-width: none; }
+.has-project-demo .rf-tags { flex-wrap: wrap; }
+.has-project-demo .project-repo { max-width: 100%; overflow-wrap: anywhere; }
+.project-demo {
+  width: min(100%, 72svh);
+  max-width: 100%;
+  min-width: 0;
+  margin: 12px auto 18px;
+}
+.project-demo[hidden] { display: none; }
+.project-demo video {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #0d1020;
+  border: 3px solid #514354;
+}
+.project-demo figcaption { margin-top: 9px; color: #796574; font: 11px/1.6 monospace; overflow-wrap: anywhere; }
+.project-demo video:focus-visible { outline: 3px solid #7e9d7a; outline-offset: 3px; }
+.project-demo video:fullscreen { width: 100%; max-width: none; height: 100%; border: 0; }
+@media (max-width: 600px) {
+  .project-demo figcaption { font-size: 10px; }
+}
+@media (max-height: 520px) {
+  .project-demo { width: min(100%, 60svh); }
+}

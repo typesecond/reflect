@@ -2,7 +2,7 @@
 
 const samples = [
   { name: 'Bridge75 battery', type: 'FIRMWARE / EMBEDDED SYSTEMS', x: .26, y: .31, kind: 'keyboard', description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate; hardware validation is pending.', tags: ['QMK / C', 'Battery telemetry', 'Fn lighting'], repo: 'https://github.com/typesecond/bridge75-firmware' },
-  { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .72, y: .36, kind: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗' },
+  { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .72, y: .36, kind: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗', demo: 'media/sifter-demo.mp4', demoPoster: 'media/sifter-demo-poster.png' },
   { name: 'Ground station', type: 'SYSTEMS / TELEMETRY', x: .28, y: .72, kind: 'dish', description: 'A sample operations interface concept. Bring satellite telemetry, communication windows, and ground-station status into a single view.', tags: ['Telemetry', 'Mission control'] },
   { name: 'Terrain explorer', type: 'GRAPHICS / MAPPING', x: .73, y: .77, kind: 'terrain', description: 'A sample mapping concept. Turn elevation data into an explorable landscape with contours, surface shading, and changing light.', tags: ['Computer graphics', 'Terrain rendering'] },
 ];
@@ -10,6 +10,7 @@ const field = document.querySelector('#field');
 const lit = document.querySelector('#illuminated');
 const canvas = document.querySelector('#terrain');
 const dialog = document.querySelector('#detail');
+const projectDemo = new ProjectDemo(dialog, document.querySelector('#detail-title'));
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const found = new Set();
 const exposureMarks = [...document.querySelectorAll('#exposures i')];
@@ -123,6 +124,7 @@ function openProject(index) {
   const art = document.createElement('canvas'); art.width = 640; art.height = 640;
   drawInstallation(art.getContext('2d'), project.kind, 320, 320, 2.8);
   document.querySelector('#detail-art').replaceChildren(art);
+  projectDemo.show(project);
   dialog.showModal();
 }
 document.querySelector('#close').addEventListener('click', () => dialog.close());
