@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>Reflect</title>
+  <meta name="description" content="Explore four projects with a little reflected light.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="reflect.css">
+  <link rel="stylesheet" href="pixel-theme.css">
+  <script src="pixel-world.js" defer></script>
+  <script src="knob-sound.js" defer></script>
+  <script src="showcase-player.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="reflect.js" defer></script>
+</head>
+<body>
+  <main id="field" aria-label="Interactive project map">
+    <div id="illuminated">
+      <canvas id="terrain" aria-hidden="true"></canvas>
+      <div id="projects" aria-label="Projects"></div>
+      <div id="light" aria-hidden="true"></div>
+      <div id="reticle" aria-hidden="true"><span></span><i></i></div>
+    </div>
+    <header class="hud top"><span class="identity"><span>REFLECT</span></span></header>
+    <footer class="hud bottom"><div class="discovery"><div id="exposures" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p id="discovered" role="status" aria-live="polite">00 / 04 DISCOVERED</p></div></footer>
+  </main>
+  <dialog id="detail" aria-labelledby="detail-title" aria-describedby="detail-description">
+    <button id="close" aria-label="Close project"><span>BACK TO NIGHT</span> ×</button>
+    <div class="specimen" aria-hidden="true"><span class="specimen-label">REFLECTED / OBJECT STUDY</span><div class="specimen-orbit"></div><div id="detail-art"></div><span class="specimen-index" id="specimen-index">01</span><span class="specimen-foot">PLAN VIEW <i></i> LIGHT CAPTURED</span></div>
+    <div class="field-note"><p class="detail-kicker" id="detail-kicker"></p><p class="note-label">A small discovery.</p><h1 id="detail-title"></h1><div class="note-rule"><span>✳</span></div><p id="detail-description"></p><div id="detail-tags"></div><p class="sample-note">Sample project · Placeholder for your work</p><a id="detail-repo" class="project-repo" hidden target="_blank" rel="noopener noreferrer">View firmware on GitHub ↗</a><button id="return">Continue the search <span>↗</span></button></div>
+  </dialog>
+  <noscript>This interactive map requires JavaScript. Projects: Bridge75 battery firmware, Sifter Ethereum vanity miner, Ground station, and Terrain explorer. Source: https://github.com/typesecond/bridge75-firmware and https://github.com/typesecond/sifter.</noscript>
+</body>
+</html>
