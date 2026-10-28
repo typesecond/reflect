@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rocket League net — Reflect prototype</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <a class="back-link" href="../../index.html">← Back to portfolio</a>
+      <section class="intro">
+        <p class="eyebrow">Rocket League soccer-net project / prototype 01</p>
+        <h1>Make the goal feel alive.</h1>
+        <p class="lede">
+          A lightweight net-deformation sandbox. Tune the net, place the impact,
+          then fire a shot to see the response. This is a standalone browser prototype; Rocket League
+          custom-map integration is pending.
+        </p>
+      </section>
+
+      <section class="workbench" aria-label="Soccer net prototype">
+        <div class="stage-card">
+          <div class="stage-header">
+            <div>
+              <p class="eyebrow">Live simulation</p>
+              <h2 id="status">Ready for a shot</h2>
+            </div>
+            <button id="goalButton" class="primary">Trigger goal <span>↗</span></button>
+          </div>
+          <canvas id="netCanvas" aria-label="Animated soccer goal net"></canvas>
+          <div class="stage-footer">
+            <span><i class="dot blue"></i> Blue goal</span>
+            <span id="readout">Impact 50% / 50% · Speed 70%</span>
+          </div>
+        </div>
+
+        <aside class="controls">
+          <div class="control-group">
+            <div class="control-label"><label for="depth">Net depth</label><output id="depthValue">1.20 m</output></div>
+            <input id="depth" type="range" min="0.4" max="2.4" value="1.2" step="0.05" />
+          </div>
+          <div class="control-group">
+            <div class="control-label"><label for="grid">Grid spacing</label><output id="gridValue">0.35 m</output></div>
+            <input id="grid" type="range" min="0.15" max="0.7" value="0.35" step="0.05" />
+          </div>
+          <div class="control-group">
+            <div class="control-label"><label for="speed">Shot speed</label><output id="speedValue">70%</output></div>
+            <input id="speed" type="range" min="0" max="100" value="70" step="1" />
+          </div>
+          <div class="control-group">
+            <div class="control-label"><label for="impactX">Impact left / right</label><output id="impactXValue">50%</output></div>
+            <input id="impactX" type="range" min="0" max="100" value="50" step="1" />
+          </div>
+          <div class="control-group">
+            <div class="control-label"><label for="impactY">Impact low / high</label><output id="impactYValue">50%</output></div>
+            <input id="impactY" type="range" min="0" max="100" value="50" step="1" />
+          </div>
+
+          <div class="notes">
+            <p class="eyebrow">Prototype notes</p>
+            <p>Visual deformation prototype. Game integration and collision validation are pending.</p>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
+

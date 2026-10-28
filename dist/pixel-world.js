@@ -83,6 +83,20 @@ window.PixelWorld = (() => {
       rect(c, x - 8, y - 5, 16, 3, '#dcf1c0');
       rect(c, x - 5, y - 2, 10, 3, '#b9ec78');
       rect(c, x - 2, y + 1, 4, 3, '#83b765');
+    } else if (kind === 'goal') {
+      // A pixel goal frame, recessed net, and ball for the playable sandbox.
+      rect(c, x - 23, y - 32, 43, 27, '#26344c');
+      rect(c, x - 20, y - 29, 37, 23, '#426578');
+      for (let col = 0; col < 7; col++) rect(c, x - 19 + col * 6, y - 28, 1, 23, '#a0c8c7');
+      for (let row = 0; row < 5; row++) rect(c, x - 20, y - 28 + row * 5, 38, 1, '#a0c8c7');
+      rect(c, x - 25, y - 34, 48, 4, '#ffe9be');
+      rect(c, x - 25, y - 32, 4, 29, '#ffe9be');
+      rect(c, x + 19, y - 32, 4, 29, '#ffe9be');
+      rect(c, x - 21, y - 3, 40, 3, '#7acb9d');
+      rect(c, x - 8, y - 10, 12, 9, '#fff0cf');
+      rect(c, x - 11, y - 8, 18, 5, '#fff0cf');
+      rect(c, x - 5, y - 8, 4, 4, '#39485f');
+      rect(c, x + 3, y - 5, 3, 3, '#39485f');
     } else if (kind === 'orbit') {
       rect(c, x - 8, y - 17, 17, 11, '#526281'); rect(c, x - 10, y - 20, 21, 4, '#2c3457');
       rect(c, x - 6, y - 28, 13, 9, '#9aaed1'); rect(c, x - 3, y - 31, 7, 3, '#cad1dc');
