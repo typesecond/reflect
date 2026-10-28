@@ -23,7 +23,7 @@
   document.body.prepend(field);
   document.body.style.overflow = 'hidden';
 
-  const player = new ShowcasePlayer(revealNormalSite);
+  const player = new ShowcasePlayer(returnToPortfolio);
 
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const land = document.querySelector('#reflect-land');
@@ -41,7 +41,6 @@
   let x = -1000, y = -1000, targetX = x, targetY = y;
   let strength = 0, pointerOn = false, sayoOn = false;
   let animationFrame = 0, lastFrame = 0, knobIndex = -1, currentProject = -1;
-  let transitioning = false;
 
 
   function drawTerrain() {
@@ -82,6 +81,7 @@
   }
   function animate(time) {
     animationFrame = 0;
+    if (!player.element.hidden) return;
     const elapsed = Math.min(50, lastFrame ? time - lastFrame : 16); lastFrame = time;
     const ease = reducedMotion.matches ? 1 : 1 - Math.exp(-elapsed / 65);
     x += (targetX - x) * ease; y += (targetY - y) * ease;
@@ -131,7 +131,7 @@
     const rect = field.getBoundingClientRect(); pointAt(event.clientX - rect.left, event.clientY - rect.top, 'pointer');
   });
   field.addEventListener('pointerleave', event => {
-    if (event.pointerType === 'touch' || dialog.open) return;
+    if (event.pointerType === 'touch' || dialog.open || !player.element.hidden) return;
     pointerOn = false; sayoOn = false;
     field.classList.remove('is-lit');
     schedule();
@@ -149,25 +149,21 @@
     event.preventDefault();
     illuminateProject((knobIndex + (event.deltaY >= 0 ? 1 : -1) + projects.length) % projects.length);
   }, { passive: false });
-  window.addEventListener('blur', () => { sayoOn = false; pointerOn = false; schedule(); });
-  continueButton.addEventListener('click', () => player.open());
+  window.addEventListener('blur', () => {
+    if (!player.element.hidden) return;
+    sayoOn = false; pointerOn = false; schedule();
+  });
+  continueButton.addEventListener('click', () => {
+    field.inert = true;
+    player.open();
+    player.playButton.focus({ preventScroll: true });
+  });
 
-  function revealNormalSite() {
-    if (transitioning) return;
-    transitioning = true;
-    normalSite.inert = false;
-    normalDetail.inert = false;
-    window.dispatchEvent(new Event('reflect:show-site'));
-    player.element.classList.add('fading');
-    window.setTimeout(() => {
-      field.classList.add('leaving');
-      window.setTimeout(() => {
-        field.remove(); player.destroy(); document.body.style.overflow = '';
-        window.scrollTo(0, 0);
-        normalSite.setAttribute('tabindex', '-1');
-        normalSite.focus({ preventScroll: true });
-      }, 950);
-    }, 160);
+  function returnToPortfolio() {
+    player.element.hidden = true;
+    field.inert = false;
+    continueButton.focus({ preventScroll: true });
+    schedule();
   }
   document.addEventListener('keydown', event => {
     if (event.target === knobTurn && ['ArrowRight', 'ArrowDown'].includes(event.key)) { event.preventDefault(); illuminateProject((knobIndex + 1) % projects.length); }

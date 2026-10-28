@@ -15,6 +15,9 @@ Rocket League game integration are clearly marked as pending.
 
 Click anywhere on the controller knob to scan the next project. Project cards
 open on the first click or tap, and the film button is always available.
+When the film ends or is closed, the same map and controller remain available,
+with the selected project and discovery progress preserved. The film can be
+played again without reloading the page.
 
 ## Local preview
 
