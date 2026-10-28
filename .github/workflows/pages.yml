@@ -24,7 +24,7 @@ jobs:
         run: python3 scripts/check-site.py
       - name: Check JavaScript syntax
         run: |
-          for file in dist/*.js; do
+          for file in dist/*.js dist/demos/soccer-net/*.js; do
             node --check "$file"
           done
       - name: Configure Pages

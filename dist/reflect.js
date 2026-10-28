@@ -1,12 +1,7 @@
 (() => {
   'use strict';
 
-  const projects = [
-    { name: 'Bridge75 battery', type: 'FIRMWARE / EMBEDDED SYSTEMS', x: .23, y: .29, art: 'keyboard', description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate; hardware validation is pending.', tags: ['QMK / C', 'Battery telemetry', 'Fn lighting'], repo: 'https://github.com/typesecond/bridge75-firmware' },
-    { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .77, y: .31, art: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗', demo: 'media/sifter-demo.mp4', demoPoster: 'media/sifter-demo-poster.png' },
-    { name: 'Ground station', type: 'SYSTEMS / TELEMETRY', x: .23, y: .63, art: 'dish', description: 'A sample operations interface concept. Bring satellite telemetry, communication windows, and ground-station status into a single view.', tags: ['Telemetry', 'Mission control'] },
-    { name: 'Terrain explorer', type: 'GRAPHICS / MAPPING', x: .77, y: .65, art: 'terrain', description: 'A sample mapping concept. Turn elevation data into an explorable landscape with contours, surface shading, and changing light.', tags: ['Computer graphics', 'Terrain rendering'] },
-  ];
+  const projects = ReflectProjects.map(project => ({ ...project, x: project.position[0], y: project.position[1] }));
 
   const normalSite = document.querySelector('#field');
   const normalDetail = document.querySelector('#detail');
@@ -21,9 +16,9 @@
       <div id="reflect-land"><canvas id="reflect-terrain" aria-hidden="true"></canvas><div id="reflect-projects"></div><div id="reflect-light" aria-hidden="true"></div></div>
     </div>
     <header class="rf-hud rf-top"><span class="rf-brand"><span>REFLECT</span></span></header>
-    <footer class="rf-hud rf-bottom"><div class="rf-discovery"><div class="rf-exposures" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p id="rf-count" role="status" aria-live="polite">00 / 04 DISCOVERED</p></div></footer>
-    <aside id="sayo-controller" aria-label="Interactive Sayo controller"><div class="sayo-shell"><div class="sayo-screen"><strong id="sayo-message">hire me, reflect :)</strong></div><div class="sayo-controls"><div class="sayo-knob"><button id="sayo-knob-turn" class="sayo-knob-turn" type="button" aria-label="Turn the knob to scan the next project"></button><button id="sayo-knob-press" class="sayo-knob-press" type="button" aria-label="Press the knob to reset the spotlight"></button></div></div></div></aside>
-    <button id="rf-continue" type="button">Play film ↗</button>
+    <footer class="rf-hud rf-bottom"><div class="rf-discovery"><div class="rf-exposures" aria-hidden="true">${projects.map(() => '<i></i>').join('')}</div><p id="rf-count" role="status" aria-live="polite">00 / ${String(projects.length).padStart(2, '0')} DISCOVERED</p></div></footer>
+    <aside id="sayo-controller" aria-label="Interactive Sayo controller"><div class="sayo-shell"><div class="sayo-screen"><strong id="sayo-message">Click knob to explore</strong></div><div class="sayo-controls"><div class="sayo-knob"><button id="sayo-knob-turn" class="sayo-knob-turn" type="button" aria-label="Scan the next project" title="Scan the next project"><span class="sayo-knob-press" aria-hidden="true"></span></button></div></div></div></aside>
+    <button id="rf-continue" class="visible" type="button">Play film ↗</button>
     <dialog id="rf-detail" aria-labelledby="rf-detail-title"><button class="rf-modal-close" type="button" aria-label="Close project">×</button><p class="rf-modal-kicker"></p><h2 id="rf-detail-title"></h2><p class="rf-modal-description"></p><div class="rf-tags"></div><a class="project-repo" hidden target="_blank" rel="noopener noreferrer">View firmware on GitHub ↗</a></dialog>`;
   document.body.prepend(field);
   document.body.style.overflow = 'hidden';
@@ -40,7 +35,6 @@
   const countLabel = document.querySelector('#rf-count');
   const continueButton = document.querySelector('#rf-continue');
   const knobTurn = document.querySelector('#sayo-knob-turn');
-  const knobPress = document.querySelector('#sayo-knob-press');
   const found = new Set();
   const projectButtons = [];
   let width = 0, height = 0, radius = 260;
@@ -63,9 +57,10 @@
       if (found.has(index)) button.classList.add('found');
       const parts = project.name.split(' ');
       button.innerHTML = `<strong>${parts[0]} <em>${parts.slice(1).join(' ')}</em></strong><span class="rf-arrow" aria-hidden="true">↗</span>`;
+      button.addEventListener('focus', () => pointAt(project.x * width, project.y * height, 'sayo'));
       button.addEventListener('click', () => {
-        const distance = Math.hypot(project.x * width - x, project.y * height - y);
-        if (strength > .3 && distance < radius * .7) openProject(index);
+        pointAt(project.x * width, project.y * height, 'snap');
+        openProject(index);
       });
       projectLayer.append(button); projectButtons.push(button);
     });
@@ -81,7 +76,8 @@
   }
   function illuminateProject(index) {
     knobIndex = index; currentProject = index;
-    knobTurn.style.rotate = `${index * 90}deg`;
+    document.querySelector('#sayo-message').textContent = `Project ${index + 1} / ${projects.length}`;
+    knobTurn.style.rotate = `${index * 360 / projects.length}deg`;
     pointAt(projects[index].x * width, projects[index].y * height, 'sayo');
   }
   function animate(time) {
@@ -98,9 +94,9 @@
     });
     if (strength > .5) projects.forEach((project, index) => {
       if (!found.has(index) && Math.hypot(project.x * width - x, project.y * height - y) < radius * .46) {
-        found.add(index); projectButtons[index].classList.add('found'); beams[index].classList.add('found'); countLabel.textContent = `0${found.size} / 04 DISCOVERED`;
+        found.add(index); projectButtons[index].classList.add('found'); beams[index].classList.add('found'); countLabel.textContent = `${String(found.size).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')} DISCOVERED`;
         if (found.size === projects.length) {
-          countLabel.textContent = '04 / 04 DISCOVERED';
+          countLabel.textContent = `${String(projects.length).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')} DISCOVERED`;
           continueButton.classList.add('visible');
         }
       }
@@ -116,15 +112,18 @@
     dialog.querySelector('.rf-modal-description').textContent = project.description;
     const tags = dialog.querySelector('.rf-tags'); tags.replaceChildren(...project.tags.map(tag => { const el = document.createElement('span'); el.textContent = tag; return el; }));
     const repoLink = dialog.querySelector('.project-repo');
-    repoLink.hidden = !project.repo;
-    repoLink.textContent = project.linkLabel || 'View firmware on GitHub ↗';
-    if (project.repo) repoLink.href = project.repo;
+    repoLink.hidden = !project.url;
+    repoLink.textContent = project.linkLabel;
+    if (project.url) repoLink.href = project.url;
     else repoLink.removeAttribute('href');
     projectDemo.show(project);
     if (!dialog.open) dialog.showModal();
   }
   dialog.querySelector('.rf-modal-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('click', event => {
+    const r = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)) dialog.close();
+  });
   dialog.addEventListener('close', () => { if (currentProject >= 0) { const project = projects[currentProject]; if (sayoOn) pointAt(project.x * width, project.y * height, 'snap'); } });
 
   field.addEventListener('pointermove', event => {
@@ -148,16 +147,10 @@
   });
   knobTurn.addEventListener('wheel', event => {
     event.preventDefault();
-    illuminateProject((knobIndex + (event.deltaY >= 0 ? 1 : 3) + projects.length) % projects.length);
+    illuminateProject((knobIndex + (event.deltaY >= 0 ? 1 : -1) + projects.length) % projects.length);
   }, { passive: false });
-  knobPress.addEventListener('click', () => {
-    playKnobClick();
-    sayoOn = false; pointerOn = false; knobIndex = -1;
-    knobTurn.style.rotate = '0deg';
-    field.classList.remove('is-lit'); schedule();
-  });
   window.addEventListener('blur', () => { sayoOn = false; pointerOn = false; schedule(); });
-  continueButton.addEventListener('click', () => { if (found.size === projects.length) player.open(); });
+  continueButton.addEventListener('click', () => player.open());
 
   function revealNormalSite() {
     if (transitioning) return;
@@ -178,10 +171,11 @@
   }
   document.addEventListener('keydown', event => {
     if (event.target === knobTurn && ['ArrowRight', 'ArrowDown'].includes(event.key)) { event.preventDefault(); illuminateProject((knobIndex + 1) % projects.length); }
-    if (event.target === knobTurn && ['ArrowLeft', 'ArrowUp'].includes(event.key)) { event.preventDefault(); illuminateProject((knobIndex + 3 + projects.length) % projects.length); }
+    if (event.target === knobTurn && ['ArrowLeft', 'ArrowUp'].includes(event.key)) { event.preventDefault(); illuminateProject((knobIndex - 1 + projects.length) % projects.length); }
   });
 
   let resizeTimer;
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(drawTerrain, 120); });
   drawTerrain();
+  illuminateProject(0);
 })();

@@ -20,16 +20,19 @@ def check_reference(value, parent):
 
 
 class HTMLAssets(HTMLParser):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
+
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
         for key in ("src", "poster"):
             if key in values:
-                check_reference(values[key], ROOT)
-        if tag == "link" and "href" in values:
-            check_reference(values["href"], ROOT)
+                check_reference(values[key], self.parent)
+        if tag in ("link", "a") and "href" in values:
+            check_reference(values["href"], self.parent)
 
 
-HTMLAssets().feed((ROOT / "index.html").read_text())
 for source in ROOT.rglob("*"):
     if not source.is_file():
         continue
@@ -37,8 +40,10 @@ for source in ROOT.rglob("*"):
     assert source.stat().st_size < 100 * 1024 * 1024, f"File too large for a normal Git push: {source}"
     if source.suffix in (".html", ".js", ".css"):
         content = source.read_text()
+        if source.suffix == ".html":
+            HTMLAssets(source.parent).feed(content)
         assert not re.search(r"(?:localhost|127\.0\.0\.1|file:///|/Users/)", content), f"Local-only runtime reference: {source}"
-        for media in re.findall(r'''["']((?:media|assets)/[^"'<>]+\.(?:mp4|png|svg|ttf))["']''', content):
+        for media in re.findall(r'''["']((?:media|assets|demos)/[^"'<>]+\.(?:mp4|png|svg|ttf|html))["']''', content):
             check_reference(media, source.parent)
         if source.suffix == ".css":
             for url in re.findall(r'''url\(\s*["']?([^"')]+)["']?\s*\)''', content):

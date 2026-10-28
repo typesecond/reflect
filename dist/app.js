@@ -1,11 +1,6 @@
 'use strict';
 
-const samples = [
-  { name: 'Bridge75 battery', type: 'FIRMWARE / EMBEDDED SYSTEMS', x: .26, y: .31, kind: 'keyboard', description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate; hardware validation is pending.', tags: ['QMK / C', 'Battery telemetry', 'Fn lighting'], repo: 'https://github.com/typesecond/bridge75-firmware' },
-  { name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', x: .72, y: .36, kind: 'sifter', description: 'Find an Ethereum address with a prefix, suffix, or both. Sifter pairs a pixel-art desktop interface with CPU and OpenCL search, live progress, and password-encrypted wallet export. Every result is checked against its private key. An experimental open-source project with a CLI and regression tests.', tags: ['Python', 'CPU / OpenCL', 'Pixel UI'], repo: 'https://github.com/typesecond/sifter', linkLabel: 'View Sifter on GitHub ↗', demo: 'media/sifter-demo.mp4', demoPoster: 'media/sifter-demo-poster.png' },
-  { name: 'Ground station', type: 'SYSTEMS / TELEMETRY', x: .28, y: .72, kind: 'dish', description: 'A sample operations interface concept. Bring satellite telemetry, communication windows, and ground-station status into a single view.', tags: ['Telemetry', 'Mission control'] },
-  { name: 'Terrain explorer', type: 'GRAPHICS / MAPPING', x: .73, y: .77, kind: 'terrain', description: 'A sample mapping concept. Turn elevation data into an explorable landscape with contours, surface shading, and changing light.', tags: ['Computer graphics', 'Terrain rendering'] },
-];
+const samples = ReflectProjects.map(project => ({ ...project, x: project.position[0], y: project.position[1] }));
 const field = document.querySelector('#field');
 const lit = document.querySelector('#illuminated');
 const canvas = document.querySelector('#terrain');
@@ -21,6 +16,7 @@ let keyboard = false, lastProject;
 
 const buttons = samples.map((project, index) => {
   const button = document.createElement('button');
+  button.type = 'button';
   button.className = 'project';
   button.style.left = `${project.x * 100}%`;
   button.style.top = `${project.y * 100}%`;
@@ -30,9 +26,8 @@ const buttons = samples.map((project, index) => {
   button.addEventListener('focus', () => {
     if (keyboard) aim(project.x * width, project.y * height, true);
   });
-  button.addEventListener('click', event => {
-    // A masked element still has a hit box: ignore clicks before it is lit.
-    if (event.detail && (strength < .3 || Math.hypot(x - project.x * width, y - project.y * height) > radius * .7)) return;
+  button.addEventListener('click', () => {
+    aim(project.x * width, project.y * height, true);
     openProject(index);
   });
   document.querySelector('#projects').append(button);
@@ -79,7 +74,7 @@ function animate(time) {
       found.add(index);
       buttons[index].classList.add('found');
       exposureMarks[index].classList.add('found');
-      document.querySelector('#discovered').textContent = `0${found.size} / 04 DISCOVERED`;
+      document.querySelector('#discovered').textContent = `${String(found.size).padStart(2, '0')} / ${String(samples.length).padStart(2, '0')} DISCOVERED`;
     }
   });
   if (Math.abs(targetX - x) + Math.abs(targetY - y) > .1 || Math.abs((active ? 1 : 0) - strength) > .001) schedule();
@@ -116,11 +111,11 @@ function openProject(index) {
     const span = document.createElement('span'); span.textContent = tag; return span;
   }));
   const repoLink = document.querySelector('#detail-repo');
-  repoLink.hidden = !project.repo;
-  repoLink.textContent = project.linkLabel || 'View firmware on GitHub ↗';
-  if (project.repo) repoLink.href = project.repo;
+  repoLink.hidden = !project.url;
+  repoLink.textContent = project.linkLabel;
+  if (project.url) repoLink.href = project.url;
   else repoLink.removeAttribute('href');
-  document.querySelector('.sample-note').textContent = project.name === 'Sifter' ? 'Experimental software · 19 regression tests' : project.repo ? 'Software-validated firmware · Hardware validation pending' : 'Sample project · Placeholder for your work';
+  document.querySelector('.sample-note').textContent = project.status;
   const art = document.createElement('canvas'); art.width = 640; art.height = 640;
   drawInstallation(art.getContext('2d'), project.kind, 320, 320, 2.8);
   document.querySelector('#detail-art').replaceChildren(art);
@@ -147,7 +142,7 @@ window.addEventListener('reflect:show-site', () => {
     buttons[index].classList.add('found');
     exposureMarks[index].classList.add('found');
   });
-  document.querySelector('#discovered').textContent = '04 / 04 DISCOVERED';
+  document.querySelector('#discovered').textContent = `${String(samples.length).padStart(2, '0')} / ${String(samples.length).padStart(2, '0')} DISCOVERED`;
   active = false;
   schedule();
 });

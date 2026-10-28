@@ -247,3 +247,17 @@ body.exploring #intro, #reflect-field.is-lit #rf-intro { filter: none; }
 @media (max-height: 520px) {
   .project-demo { width: min(100%, 60svh); }
 }
+
+/* The whole knob advances; its center is decoration, not a reset target. */
+.sayo-knob-turn { position: relative; }
+.sayo-knob-turn .sayo-knob-press { pointer-events: none; box-shadow: none; }
+#rf-continue:focus-visible { outline: 3px solid #a4d3a0; outline-offset: 5px; }
+.project-repo { border: 2px solid #6a907c; background: #b3d1a3; color: #344d46; box-shadow: 3px 3px #ccad8f; font-weight: 600; }
+.project-repo:hover { background: #c8e2b6; }
+.project-repo:focus-visible { outline: 3px solid #344d46; outline-offset: 4px; }
+#rf-detail .rf-tags { flex-wrap: wrap; }
+#field, #reflect-field { min-height: 100svh; }
+@media (max-height: 520px) and (min-width: 650px) {
+  #sayo-controller { left: auto; right: 22px; bottom: 70px; transform: scale(.9); transform-origin: right bottom; }
+  #rf-continue, #rf-continue.visible { left: 24px; bottom: 24px; transform: none; }
+}
