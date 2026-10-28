@@ -9,9 +9,9 @@ https://typesecond.github.io/reflect/
 
 The three project slots feature Bridge75 battery firmware, Sifter, and a Rocket
 League soccer-net prototype. Both map views use the shared `dist/projects.js`
-project list. Sifter includes an illustrative 14-second video; the net project
-opens a playable browser sandbox. Firmware hardware validation and Rocket League
-game integration are clearly marked as pending.
+project list. Sifter includes an illustrative 14-second video. All three project
+panels link to their GitHub repositories. Firmware hardware validation and
+Rocket League game integration are clearly marked as pending.
 
 Click anywhere on the controller knob to scan the next project. Project cards
 open on the first click or tap, and the film button is always available.
@@ -37,12 +37,12 @@ python3 scripts/check-site.py
 All local asset paths are relative so the site works beneath `/reflect/` as
 well as at the root of the preview server.
 
-## Net sandbox
+## Rocket League project
 
-`dist/demos/soccer-net/` includes the working Canvas prototype from the local
-`rocket-league-soccer-net` project. Its controls change net depth, grid spacing,
-shot speed, and impact position. It models visual deformation; game integration
-is not shipped. This published copy also bundles its fonts locally.
+The third slot links to https://github.com/typesecond/rocket-league-soccer-net,
+which contains the procedural mesh generators, generated assets, Windows
+staging helper, and integration documentation. The portfolio does not host a
+copy of the browser simulation.
 
 ## Media and fonts
 

@@ -20,9 +20,9 @@ window.ReflectProjects = [
   {
     name: 'Rocket League net', type: 'GRAPHICS / GAME TOOLS', kind: 'goal',
     position: [.5, .56],
-    description: 'A soccer-style goal net that responds to a shot. The playable Canvas sandbox lets you tune net depth, grid spacing, shot speed, and impact position, then watch the mesh deform and settle. The project also includes procedural goal-asset generators for a future custom-map workflow. Rocket League integration is still pending.',
-    tags: ['Canvas / JavaScript', 'Procedural mesh', 'Net deformation'],
-    url: 'demos/soccer-net/index.html', linkLabel: 'Try the net sandbox ↗',
-    status: 'Playable browser prototype · Game integration pending',
+    description: 'A procedural soccer-style goal asset for a Rocket League custom-map workflow. Python generates the goal mesh and materials; a Blender script exports FBX, and a PowerShell helper stages the asset for UDK import. The repository includes source, generated assets, and integration guides. Game integration and collision validation are pending.',
+    tags: ['Python / Mesh generation', 'Blender / FBX', 'UDK asset pipeline'],
+    url: 'https://github.com/typesecond/rocket-league-soccer-net', linkLabel: 'View Rocket League net on GitHub ↗',
+    status: 'Procedural asset prototype · Game integration pending',
   },
 ];
