@@ -160,10 +160,21 @@
   });
 
   function returnToPortfolio() {
-    player.element.hidden = true;
-    field.inert = false;
-    continueButton.focus({ preventScroll: true });
-    schedule();
+    const finishReturn = () => {
+      player.element.hidden = true;
+      player.element.classList.remove('fading');
+      player.element.inert = false;
+      field.inert = false;
+      continueButton.focus({ preventScroll: true });
+      schedule();
+    };
+    if (reducedMotion.matches) {
+      finishReturn();
+      return;
+    }
+    player.element.inert = true;
+    player.element.classList.add('fading');
+    window.setTimeout(finishReturn, 1000);
   }
   document.addEventListener('keydown', event => {
     if (event.target === knobTurn && ['ArrowRight', 'ArrowDown'].includes(event.key)) { event.preventDefault(); illuminateProject((knobIndex + 1) % projects.length); }

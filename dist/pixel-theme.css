@@ -169,6 +169,10 @@ body.exploring #intro, #reflect-field.is-lit #rf-intro { filter: none; }
 
 /* The visible pixel timeline is the only playback/scrubbing interface. */
 #reflect-reel { background: #000; }
+/* Fade the film to black, then reveal the same map underneath. */
+#reflect-reel > * { opacity: 1; transition: opacity .5s ease; }
+#reflect-reel.fading { transition: opacity .5s ease .5s; }
+#reflect-reel.fading > * { opacity: 0; }
 .rf-player-controls { position: absolute; z-index: 3; left: 24px; right: 24px; bottom: 24px; display: flex; align-items: center; gap: 14px; padding: 12px; border: 2px solid #607a85; background: #142331ed; box-shadow: 3px 3px #0008; }
 .rf-player-controls button, #rf-skip { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; padding: 8px; border: 2px solid #849b96; border-radius: 0; background: #223c4a; color: #ffe2a6; cursor: pointer; }
 .rf-player-controls button:hover, #rf-skip:hover { background: #36515b; }
