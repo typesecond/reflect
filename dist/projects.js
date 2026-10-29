@@ -20,9 +20,9 @@ window.ReflectProjects = [
   {
     name: 'Rocket League net', type: 'GRAPHICS / GAME TOOLS', kind: 'goal',
     position: [.5, .56],
-    description: 'Project vision: a physics-accurate soccer net modeled into the existing Rocket League net enclave. Configurable net depth and mesh density shape a three-dimensional goal assembly, with a procedural modeling workflow through Python, Blender, and UDK. Designed to bring believable ball-impact response and net movement to the goal while preserving its existing layout and scoring behavior. Prototype stage; in-game integration and physics validation are pending.',
+    description: 'Project vision: a physics-accurate soccer net modeled into the existing Rocket League net enclave. Configurable net depth and mesh density shape a three-dimensional goal assembly, with a procedural modeling workflow through Python, Blender, and UDK. Designed to bring believable ball-impact response and net movement to the goal while preserving its existing layout and scoring behavior.',
     tags: ['Python / Mesh generation', 'Blender / FBX', 'UDK asset pipeline'],
     url: 'https://github.com/typesecond/rocket-league-soccer-net', linkLabel: 'View Rocket League net on GitHub ↗',
-    status: 'Procedural asset prototype · Game integration and physics validation pending',
+    status: 'Procedural asset prototype',
   },
 ];
