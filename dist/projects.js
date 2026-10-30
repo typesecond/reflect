@@ -3,10 +3,10 @@ window.ReflectProjects = [
   {
     name: 'Bridge75 battery', type: 'FIRMWARE / EMBEDDED SYSTEMS', kind: 'keyboard',
     position: [.27, .29],
-    description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate; hardware validation is pending.',
+    description: 'Hold Fn and the F1–F12 lights become a battery gauge. Six keys mean 50%; all twelve mean full. Release Fn and the keyboard goes dark. Built with QMK, with packet validation and tests for every battery level. Software-validated candidate.',
     tags: ['QMK / C', 'Battery telemetry', 'Fn lighting'],
     url: 'https://github.com/typesecond/bridge75-firmware', linkLabel: 'View firmware on GitHub ↗',
-    status: 'Software-validated firmware · Hardware validation pending',
+    status: 'Software-validated firmware',
   },
   {
     name: 'Sifter', type: 'CRYPTOGRAPHY / DESKTOP TOOLS', kind: 'sifter',
