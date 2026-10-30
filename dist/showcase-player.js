@@ -13,7 +13,7 @@ window.ShowcasePlayer = class ShowcasePlayer {
     this.element.hidden = true;
     this.element.setAttribute('aria-label', 'Sayo showcase video');
     this.element.innerHTML = `
-      <video id="rf-video" playsinline preload="metadata" src="media/sayo-showcase.mp4" aria-label="Sayo showcase"></video>
+      <video id="rf-video" playsinline preload="metadata" src="media/sayo-showcase.mp4?v=img2732" aria-label="Sayo showcase"></video>
       <p id="rf-video-loading" role="status" hidden>Loading the film...</p>
       <div id="rf-sample-reel" hidden aria-label="Sample animation" role="img"><div class="rf-film-stars"></div><div class="rf-film-mirror"></div><div class="rf-film-beam"></div><div class="rf-film-land"></div><div class="rf-film-device"></div></div>
       <button id="rf-skip" type="button" aria-label="Return to the site" title="Return to the site">×</button>

@@ -43,7 +43,7 @@ for source in ROOT.rglob("*"):
         if source.suffix == ".html":
             HTMLAssets(source.parent).feed(content)
         assert not re.search(r"(?:localhost|127\.0\.0\.1|file:///|/Users/)", content), f"Local-only runtime reference: {source}"
-        for media in re.findall(r'''["']((?:media|assets|demos)/[^"'<>]+\.(?:mp4|png|svg|ttf|html))["']''', content):
+        for media in re.findall(r'''["']((?:media|assets|demos)/[^"'<>]+\.(?:mp4|png|svg|ttf|html)(?:\?[^"'<>]*)?)["']''', content):
             check_reference(media, source.parent)
         if source.suffix == ".css":
             for url in re.findall(r'''url\(\s*["']?([^"')]+)["']?\s*\)''', content):
