@@ -1,10 +1,12 @@
 import Foundation
 import AVFoundation
 
-// Usage: swift scripts/prepare-showcase.swift source.mov output.mp4 end-seconds
-guard CommandLine.arguments.count == 4,
-      let cutoff = Double(CommandLine.arguments[3]), cutoff.isFinite, cutoff > 0 else {
-    fatalError("Usage: prepare-showcase.swift source.mov output.mp4 end-seconds")
+// Usage: swift scripts/prepare-showcase.swift source.mov output.mp4 end-seconds [start-seconds]
+guard (4...5).contains(CommandLine.arguments.count),
+      let cutoff = Double(CommandLine.arguments[3]), cutoff.isFinite, cutoff > 0,
+      let startSeconds = CommandLine.arguments.count == 5 ? Double(CommandLine.arguments[4]) : 0,
+      startSeconds.isFinite, startSeconds >= 0 else {
+    fatalError("Usage: prepare-showcase.swift source.mov output.mp4 end-seconds [start-seconds]")
 }
 let source = URL(fileURLWithPath: CommandLine.arguments[1])
 let output = URL(fileURLWithPath: CommandLine.arguments[2])
@@ -14,6 +16,9 @@ precondition(!FileManager.default.fileExists(atPath: output.path), "Output alrea
 let asset = AVURLAsset(url: source)
 let duration = try await asset.load(.duration)
 let end = CMTime(seconds: min(cutoff, duration.seconds), preferredTimescale: 60000)
+let start = CMTime(seconds: startSeconds, preferredTimescale: 60000)
+precondition(start < end, "Start must be before the clip end")
+let clipRange = CMTimeRange(start: start, end: end)
 let videoTracks = try await asset.loadTracks(withMediaType: .video)
 precondition(!videoTracks.isEmpty, "No video track")
 let videoTrack = videoTracks[0]
@@ -35,7 +40,7 @@ instruction.layerInstructions = [layer]
 composition.instructions = [instruction]
 
 let reader = try AVAssetReader(asset: asset)
-reader.timeRange = instruction.timeRange
+reader.timeRange = clipRange
 let videoOutput = AVAssetReaderVideoCompositionOutput(videoTracks: [videoTrack], videoSettings: [
     kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
 ])
@@ -66,7 +71,7 @@ for track in try await asset.loadTracks(withMediaType: .audio) {
     streams.append((audioOutput, audioInput))
 }
 precondition(writer.startWriting(), "Cannot start MP4 writer")
-writer.startSession(atSourceTime: .zero)
+writer.startSession(atSourceTime: start)
 precondition(reader.startReading(), "Cannot decode source")
 let group = DispatchGroup()
 for (index, stream) in streams.enumerated() {
@@ -96,4 +101,4 @@ precondition(reader.status == .completed, "Decode failed: \(String(describing: r
 writer.endSession(atSourceTime: end)
 await writer.finishWriting()
 precondition(writer.status == .completed, "Encode failed: \(String(describing: writer.error))")
-print("Exported \(end.seconds) seconds, \(Int(renderSize.width))x\(Int(renderSize.height)), H.264 with AAC passthrough")
+print("Exported source \(start.seconds)–\(end.seconds): \(clipRange.duration.seconds) seconds, \(Int(renderSize.width))x\(Int(renderSize.height)), H.264 with AAC passthrough")

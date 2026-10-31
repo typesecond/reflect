@@ -1,5 +1,6 @@
-`sayo-showcase.mp4` is the web copy of `IMG_2732.mov`, ending at 1:29.56
-(the source duration is 89.555 seconds).
+`sayo-showcase.mp4` contains 0:12 through 1:29.56 of `IMG_2732.mov`.
+The first 12 seconds are removed from the file. Playback starts at 0:00,
+and the edited duration is 1:17.56 (77.555 seconds).
 
 Format: H.264, 720 × 1280, 30 fps, with the original AAC audio passed through.
 Video targets 2.5 Mb/s. MP4 metadata is placed before the media data for streaming.
@@ -13,7 +14,7 @@ The 14-second animation remains a fallback for playback errors.
 Regenerate on macOS with:
 
 ```sh
-swift scripts/prepare-showcase.swift /path/to/IMG_2732.mov /tmp/sayo-showcase.mp4 89.56
+swift scripts/prepare-showcase.swift /path/to/IMG_2732.mov /tmp/sayo-showcase.mp4 89.56 12
 ```
 
 `sifter-demo.mp4` is a 14-second, silent, simulated walkthrough of Sifter's pixel
